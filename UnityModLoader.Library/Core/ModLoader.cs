@@ -10,7 +10,9 @@ namespace UnityModLoader.Core
 {
     public class ModLoader
     {
-        Type GetMainClass(Assembly asm)
+        public static readonly ModLoader Instance = new ModLoader();
+
+        public Type GetMainClass(Assembly asm)
         {
             foreach (Type type in asm.GetTypes())
                 if (type.GetCustomAttributes(typeof(MainClassAttribute), true)?.Length > 0)
@@ -18,7 +20,7 @@ namespace UnityModLoader.Core
 
             throw new InvalidAssemblyException(asm);
         }
-        MethodInfo GetEntryPoint(Type mainClass)
+        public MethodInfo GetEntryPoint(Type mainClass)
         {
             foreach (MethodInfo method in mainClass.GetMethods())
                 if (method.GetCustomAttributes(typeof(EntryPointAttribute), true)?.Length > 0)
@@ -26,7 +28,10 @@ namespace UnityModLoader.Core
 
             throw new InvalidClassException(mainClass);
         }
-        void LoadModAssembly(string path)
+
+        public void LoadDependencyAssembly(string path)
+            => Assembly.Load(File.ReadAllBytes(path));
+        public void LoadModAssembly(string path)
         {
             Assembly asm = Assembly.Load(File.ReadAllBytes(path));
 
@@ -35,6 +40,7 @@ namespace UnityModLoader.Core
 
             entryPoint.Invoke(null, null);
         }
+
         void LoadMods()
         {
             DirectoryInfo modsDir = new DirectoryInfo("Mods");
@@ -81,7 +87,7 @@ namespace UnityModLoader.Core
                 Logger.Instance.Log($"Loading \"{dependency.Name}\"... ", false);
                 try
                 {
-                    Assembly.Load(File.ReadAllBytes(dependency.FullName));
+                    LoadDependencyAssembly(dependency.FullName);
                     Logger.Instance.Append("LOADED\n");
                 }
                 catch (Exception ex)
@@ -104,7 +110,7 @@ namespace UnityModLoader.Core
             try
             {
                 Logger.Instance.Log("UnityModLoader Started.");
-                new ModLoader().Load();
+                Instance.Load();
             }
             catch (Exception ex)
             {
