@@ -6,7 +6,7 @@ using UnityModLoader.Library.Core.Logging;
 using UnityModLoader.Library.Mods;
 using UnityModLoader.Library.Mods.Attributes;
 
-namespace UnityModLoader.Core
+namespace UnityModLoader.Library.Core
 {
     public class ModLoader
     {

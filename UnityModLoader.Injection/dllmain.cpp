@@ -48,7 +48,7 @@ UINT __stdcall dwMain2(void*) {
 	//Getting the assemblys Image(Binary image, essentially a file-module).
 	MonoImage* Image = mono_assembly_get_image_(domainassembly);
 	//Declaring the class inside the custom assembly we're going to use. (Image, NameSpace, ClassName)
-	MonoClass* pClass = mono_class_from_name(Image, "UnityModLoader.Core", "ModLoader");
+	MonoClass* pClass = mono_class_from_name(Image, "UnityModLoader.Library.Core", "ModLoader");
 	//Declaring the method, that attaches our assembly to the game. (Class, MethodName, Parameters)
 	MonoMethod* MonoClassMethod = mono_class_get_method_from_name(pClass, "StartModLoader", 0);
 	//Invoking said method.
