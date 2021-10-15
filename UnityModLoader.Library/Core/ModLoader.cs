@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using UnityModLoader.Library.Core.Exceptions;
 using UnityModLoader.Library.Core.Logging;
-using UnityModLoader.Library.Mods;
-using UnityModLoader.Library.Mods.Attributes;
+using UnityModLoader.Library.Mods.Utils;
 
 namespace UnityModLoader.Library.Core
 {
@@ -12,31 +10,12 @@ namespace UnityModLoader.Library.Core
     {
         public static readonly ModLoader Instance = new ModLoader();
 
-        public Type GetMainClass(Assembly asm)
-        {
-            foreach (Type type in asm.GetTypes())
-                if (type.GetCustomAttributes(typeof(MainClassAttribute), true)?.Length > 0)
-                    return type;
-
-            throw new InvalidAssemblyException(asm);
-        }
-        public MethodInfo GetEntryPoint(Type mainClass)
-        {
-            foreach (MethodInfo method in mainClass.GetMethods())
-                if (method.GetCustomAttributes(typeof(EntryPointAttribute), true)?.Length > 0)
-                    return method;
-
-            throw new InvalidClassException(mainClass);
-        }
-
-        public void LoadDependencyAssembly(string path)
-            => Assembly.Load(File.ReadAllBytes(path));
         public void LoadModAssembly(string path)
         {
             Assembly asm = Assembly.Load(File.ReadAllBytes(path));
 
-            Type mainClass = GetMainClass(asm);
-            MethodInfo entryPoint = GetEntryPoint(mainClass);
+            Type mainClass = ModAssemblyUtility.GetMainClass(asm);
+            MethodInfo entryPoint = ModAssemblyUtility.GetEntryPoint(mainClass);
 
             entryPoint.Invoke(null, null);
         }
@@ -71,40 +50,24 @@ namespace UnityModLoader.Library.Core
             Logger.Instance.Append("\n");
             Logger.Instance.Log("== Mods Loaded ==\n");
         }
-        void LoadDependencies()
-        {
-            DirectoryInfo depsDir = new DirectoryInfo("Dependencies");
-            if (!depsDir.Exists)
-            {
-                Logger.Instance.Log("\"Dependencies\" folder not found.", messageType: Logger.MessageType.Warning);
-                depsDir.Create();
-                return;
-            }
-
-            Logger.Instance.Log("== Loading Dependencies ==\n");
-            foreach (FileInfo dependency in depsDir.GetFiles("*.dll"))
-            {
-                Logger.Instance.Log($"Loading \"{dependency.Name}\"... ", false);
-                try
-                {
-                    LoadDependencyAssembly(dependency.FullName);
-                    Logger.Instance.Append("LOADED\n");
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Append($"ERROR {ex.Message}\n\n");
-                }
-            }
-
-            Logger.Instance.Append("\n");
-            Logger.Instance.Log("== Dependecies Loaded ==\n");
-        }
 
         void Load()
         {
-            LoadDependencies();
+            AppDomain.CurrentDomain.AssemblyResolve += DynamicAssemblyLoad;
             LoadMods();
         }
+
+        private Assembly DynamicAssemblyLoad(object sender, ResolveEventArgs args)
+        {
+            string dll = $"{args.Name.Split(',')[0]}.dll";
+            string dependencyPath = $"./Dependencies/{dll}";
+
+            if (File.Exists(dependencyPath))
+                return Assembly.Load(File.ReadAllBytes(dependencyPath));
+
+            return null;
+        }
+
         public static void StartModLoader()
         {
             try
