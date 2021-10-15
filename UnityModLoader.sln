@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnityModLoader.Injection", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityModLoader.Library", "UnityModLoader.Library\UnityModLoader.Library.csproj", "{3EEF181D-13F4-4D30-8226-210F55A7D03F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModSample.AutoLoader", "ModSample.AutoLoader\ModSample.AutoLoader.csproj", "{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{3EEF181D-13F4-4D30-8226-210F55A7D03F}.Release|x64.Build.0 = Release|Any CPU
 		{3EEF181D-13F4-4D30-8226-210F55A7D03F}.Release|x86.ActiveCfg = Release|Any CPU
 		{3EEF181D-13F4-4D30-8226-210F55A7D03F}.Release|x86.Build.0 = Release|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Debug|x64.Build.0 = Debug|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Debug|x86.Build.0 = Debug|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Release|x64.ActiveCfg = Release|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Release|x64.Build.0 = Release|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Release|x86.ActiveCfg = Release|Any CPU
+		{2F38519C-1F0F-4DD4-88D5-99CF6EF2FBD8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
