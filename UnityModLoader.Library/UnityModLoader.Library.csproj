@@ -49,6 +49,7 @@
     <Compile Include="Core\ModLoader.cs" />
     <Compile Include="Mods\Attributes\EntryPointAttribute.cs" />
     <Compile Include="Mods\Attributes\MainClassAttribute.cs" />
+    <Compile Include="Mods\Utils\ModAssemblyUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
