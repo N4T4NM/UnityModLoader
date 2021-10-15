@@ -9,9 +9,12 @@ DWORD GetMonoFunction(HMODULE hMono, const char* fname) {
 UINT __stdcall dwMain2(void*) {
 
 	//Check for mono or mono2.0
-	HMODULE hMono = GetModuleHandleA("mono.dll");
-	if (hMono == 0)
-		hMono = GetModuleHandleA("mono-2.0-bdwgc.dll");
+	HMODULE hMono = 0;
+	while (hMono == 0) {
+		hMono = GetModuleHandleA("mono.dll");
+		if (hMono == 0)
+			hMono = GetModuleHandleA("mono-2.0-bdwgc.dll");
+	}
 
 	//Attach
 	typedef MonoThread* (__cdecl* mono_thread_attach_t)(MonoDomain* mDomain);
