@@ -43,7 +43,7 @@ namespace UnityModLoader.Library.Core
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.Append($"ERROR {ex.Message}\n\n");
+                    Logger.Instance.Append(ex.ToString());
                 }
             }
 
