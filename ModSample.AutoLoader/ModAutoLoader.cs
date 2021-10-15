@@ -5,7 +5,11 @@ using UnityModLoader.Library.Mods.Attributes;
 
 namespace ModSample.AutoLoader
 {
-    [MainClass]
+    [MainClass(
+        ModAuthor = "NatanM",
+        ModDescription = "Shows a confirmation dialog when new mod is detected",
+        ModName = "Auto Loader"
+        )]
     public class ModAutoLoader
     {
         [EntryPoint]
