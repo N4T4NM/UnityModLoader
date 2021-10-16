@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using UnityModLoader.Library.Mods.Attributes;
 using UnityModLoader.Library.Mods.Utils;
@@ -84,12 +85,12 @@ namespace UnityModLoader.Manager
         void RemoveMod(FileInfo modFile)
         {
             ModControl mod = FindMod(modFile);
-            if(mod != null)
+            if (mod != null)
                 ModsData.Children.Remove(mod);
         }
         ModControl FindMod(FileInfo modFile)
         {
-            foreach(UIElement element in ModsData.Children)
+            foreach (UIElement element in ModsData.Children)
             {
                 ModControl mod = element as ModControl;
                 if (mod.ModPath.FullName == modFile.FullName)
@@ -155,7 +156,7 @@ namespace UnityModLoader.Manager
             FileSystemWatcher fs = new FileSystemWatcher("./Mods", "*.dll");
             fs.Created += (s, ev) =>
             {
-                this.Dispatcher.Invoke(()=>AddMod(new FileInfo(ev.FullPath)));
+                this.Dispatcher.Invoke(() => AddMod(new FileInfo(ev.FullPath)));
             };
             fs.Deleted += (s, ev) =>
             {
@@ -189,7 +190,21 @@ namespace UnityModLoader.Manager
             return null;
         }
 
+        Process gameProcess;
         private void LaunchButton_Click(object sender, RoutedEventArgs e)
-            => new Injector().Inject(currentGame);
+        {
+            if (gameProcess == null || gameProcess.HasExited)
+            {
+                gameProcess = Process.Start(currentGame.FullName);
+                LaunchButton.Content = "Inject Mods";
+
+                new Task(() =>
+                {
+                    while (!gameProcess.HasExited) ;
+                    Dispatcher.Invoke(() => LaunchButton.Content = "Launch");
+                }).Start();
+            } else new Injector().Inject(gameProcess);
+
+        }
     }
 }

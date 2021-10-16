@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Windows;
 
 namespace UnityModLoader.Manager
@@ -40,11 +38,11 @@ namespace UnityModLoader.Manager
         const uint MEM_RESERVE = 0x00002000;
         const uint PAGE_READWRITE = 4;
 
-        public void Inject(FileInfo exec)
+        public void Inject(Process game)
         {
+            if (game == null || game.HasExited)
+                return;
             Application.Current.MainWindow.Hide();
-            Process game = Process.Start(exec.FullName);
-            Thread.Sleep(2000);
 
             string dll = "UnityModLoader.Injection.dll";
             IntPtr hProcess = OpenProcess(
