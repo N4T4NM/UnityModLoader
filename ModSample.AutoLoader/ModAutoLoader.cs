@@ -1,19 +1,17 @@
 ﻿using System.IO;
 using UnityModLoader.Library.Core.Logging;
 using UnityModLoader.Library.Mods;
-using UnityModLoader.Library.Mods.Attributes;
 
 namespace ModSample.AutoLoader
 {
-    [MainClass(
-        ModAuthor = "NatanM",
-        ModDescription = "Shows a confirmation dialog when new mod is detected",
-        ModName = "Auto Loader"
-        )]
-    public class ModAutoLoader
+    public class ModAutoLoader : UnityMod
     {
-        [EntryPoint]
-        public static void Run()
+        public override string Name => "Mod Auto Loader";
+        public override string Description => "Shows a confirmation dialog when new mod is detected";
+        public override string Author => "NatanM";
+        public override string Version => "1.0";
+
+        public override void Init()
         {
             UnityEngine.GameObject holder = new UnityEngine.GameObject("ModLoaderUI");
             UnityEngine.GameObject.DontDestroyOnLoad(holder);
@@ -22,10 +20,10 @@ namespace ModSample.AutoLoader
             FileSystemWatcher watcher = new FileSystemWatcher("./Mods", "*.dll");
             watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
             watcher.Created += (s, e) =>
-                {
-                    Logger.Instance.Log($"New mod file detected, {e.Name}");
-                    ui.Files.Add(new FileInfo(e.FullPath));
-                };
+            {
+                Logger.Instance.Log($"New mod file detected, {e.Name}");
+                ui.Files.Add(new FileInfo(e.FullPath));
+            };
             watcher.EnableRaisingEvents = true;
         }
     }

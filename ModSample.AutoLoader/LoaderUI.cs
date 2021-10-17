@@ -37,7 +37,7 @@ namespace ModSample.AutoLoader
 
                 try
                 {
-                    ModLoader.Instance.LoadModAssembly(Files[0].FullName);
+                    ModLoader.Instance.LoadModAssembly(Files[0]);
                     UnityModLoader.Library.Core.Logging.Logger.Instance.Log($"Mod \"{Files[0].Name}\" loaded by user.");
                 }
                 catch (Exception ex)
