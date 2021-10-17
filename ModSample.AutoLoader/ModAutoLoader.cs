@@ -4,14 +4,14 @@ using UnityModLoader.Library.Mods;
 
 namespace ModSample.AutoLoader
 {
-    public class ModAutoLoader : UnityMod
+    public class ModAutoLoader : IUnityMod
     {
-        public override string Name => "Mod Auto Loader";
-        public override string Description => "Shows a confirmation dialog when new mod is detected";
-        public override string Author => "NatanM";
-        public override string Version => "1.0";
+        public string Name => "Mod Auto Loader";
+        public string Description => "Shows a confirmation dialog when new mod is detected";
+        public string Author => "NatanM";
+        public string Version => "1.0";
 
-        public override void Init()
+        public void Init()
         {
             UnityEngine.GameObject holder = new UnityEngine.GameObject("ModLoaderUI");
             UnityEngine.GameObject.DontDestroyOnLoad(holder);

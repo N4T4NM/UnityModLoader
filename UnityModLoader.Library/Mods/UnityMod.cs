@@ -1,16 +1,15 @@
-﻿using System;
-namespace UnityModLoader.Library.Mods
+﻿namespace UnityModLoader.Library.Mods
 {
-    public abstract class UnityMod : MarshalByRefObject
+    public interface IUnityMod
     {
-        public virtual string Name { get; }
-        public virtual string Description { get; }
-        public virtual string Version { get; }
-        public virtual string Author { get; }
+        string Name { get; }
+        string Description { get; }
+        string Version { get; }
+        string Author { get; }
 
         /// <summary>
         /// Called after injection
         /// </summary>
-        public virtual void Init() { }
+        void Init();
     }
 }

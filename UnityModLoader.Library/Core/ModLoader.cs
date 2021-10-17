@@ -32,7 +32,7 @@ namespace UnityModLoader.Library.Core
                 asm = Assembly.Load(File.ReadAllBytes(modFile.FullName), symbols);
             else asm = Assembly.Load(File.ReadAllBytes(modFile.FullName));
 
-            UnityMod mod = ModAssemblyUtility.GetMod(asm);
+            IUnityMod mod = ModAssemblyUtility.GetMod(asm);
             mod.Init();
         }
 
