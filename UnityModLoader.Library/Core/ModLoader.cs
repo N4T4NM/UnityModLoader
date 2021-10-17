@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using UnityModLoader.Library.Core.Logging;
+using UnityModLoader.Library.Mods;
 using UnityModLoader.Library.Mods.Utils;
 
 namespace UnityModLoader.Library.Core
@@ -10,14 +12,28 @@ namespace UnityModLoader.Library.Core
     {
         public static readonly ModLoader Instance = new ModLoader();
 
-        public void LoadModAssembly(string path)
+        bool GetSymbolStore(FileInfo dllFile, out byte[] data)
         {
-            Assembly asm = Assembly.Load(File.ReadAllBytes(path));
+            data = null;
+            string pdbName = dllFile.Name.Remove(dllFile.Name.LastIndexOf('.')) + ".pdb";
 
-            Type mainClass = ModAssemblyUtility.GetMainClass(asm);
-            MethodInfo entryPoint = ModAssemblyUtility.GetEntryPoint(mainClass);
+            FileInfo pdbFile = dllFile.Directory.GetFiles(pdbName).FirstOrDefault();
+            if (pdbFile == null)
+                return false;
 
-            entryPoint.Invoke(null, null);
+            data = File.ReadAllBytes(pdbFile.FullName);
+            return true;
+        }
+
+        public void LoadModAssembly(FileInfo modFile)
+        {
+            Assembly asm;
+            if (GetSymbolStore(modFile, out byte[] symbols))
+                asm = Assembly.Load(File.ReadAllBytes(modFile.FullName), symbols);
+            else asm = Assembly.Load(File.ReadAllBytes(modFile.FullName));
+
+            UnityMod mod = ModAssemblyUtility.GetMod(asm);
+            mod.Init();
         }
 
         void LoadMods()
@@ -38,7 +54,7 @@ namespace UnityModLoader.Library.Core
                 Logger.Instance.Log($"Loading \"{mod.Name}\"... ", false);
                 try
                 {
-                    LoadModAssembly(mod.FullName);
+                    LoadModAssembly(mod);
                     Logger.Instance.Append("LOADED\n");
                 }
                 catch (Exception ex)
@@ -60,10 +76,14 @@ namespace UnityModLoader.Library.Core
         private Assembly DynamicAssemblyLoad(object sender, ResolveEventArgs args)
         {
             string dll = $"{args.Name.Split(',')[0]}.dll";
-            string dependencyPath = $"./Dependencies/{dll}";
+            FileInfo dependencyFile = new FileInfo($"./Dependencies/{dll}");
 
-            if (File.Exists(dependencyPath))
-                return Assembly.Load(File.ReadAllBytes(dependencyPath));
+            if (dependencyFile.Exists)
+            {
+                if (GetSymbolStore(dependencyFile, out byte[] symbols))
+                    return Assembly.Load(File.ReadAllBytes(dependencyFile.FullName), symbols);
+                else return Assembly.Load(File.ReadAllBytes(dependencyFile.FullName));
+            }
 
             return null;
         }

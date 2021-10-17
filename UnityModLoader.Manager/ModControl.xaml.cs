@@ -37,6 +37,17 @@ namespace UnityModLoader.Manager
             }
         }
 
+        string _version;
+        public string ModVersion
+        {
+            get => _version;
+            set
+            {
+                _version = value;
+                VersionText.Text = $"Version: {value}";
+            }
+        }
+
         public ModControl()
         {
             InitializeComponent();

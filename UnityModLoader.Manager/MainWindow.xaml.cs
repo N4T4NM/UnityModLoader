@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using UnityModLoader.Library.Mods.Attributes;
+using UnityModLoader.Library.Mods;
 using UnityModLoader.Library.Mods.Utils;
 
 namespace UnityModLoader.Manager
@@ -68,14 +68,13 @@ namespace UnityModLoader.Manager
         void AddMod(FileInfo modFile)
         {
             Assembly modAsm = Assembly.Load(File.ReadAllBytes(modFile.FullName));
-
-            MainClassAttribute main = ModAssemblyUtility.GetMainClass(modAsm)
-                .GetCustomAttribute<MainClassAttribute>();
+            UnityMod mod = ModAssemblyUtility.GetMod(modAsm);
 
             ModControl control = new ModControl();
-            control.ModName = main.ModName;
-            control.ModDescription = main.ModDescription;
-            control.ModAuthor = main.ModAuthor;
+            control.ModName = mod.Name;
+            control.ModDescription = mod.Description;
+            control.ModAuthor = mod.Author;
+            control.ModVersion = mod.Version;
 
             control.ModPath = modFile;
             control.EnabledCheck.IsChecked = modFile.Name.EndsWith(".dll");
@@ -203,7 +202,8 @@ namespace UnityModLoader.Manager
                     while (!gameProcess.HasExited) ;
                     Dispatcher.Invoke(() => LaunchButton.Content = "Launch");
                 }).Start();
-            } else new Injector().Inject(gameProcess);
+            }
+            else new Injector().Inject(gameProcess);
 
         }
     }

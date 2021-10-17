@@ -43,12 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Exceptions\InvalidAssemblyException.cs" />
-    <Compile Include="Core\Exceptions\InvalidClassException.cs" />
     <Compile Include="Core\Logging\Logger.cs" />
     <Compile Include="Core\Logging\LoggerExtensions.cs" />
     <Compile Include="Core\ModLoader.cs" />
-    <Compile Include="Mods\Attributes\EntryPointAttribute.cs" />
-    <Compile Include="Mods\Attributes\MainClassAttribute.cs" />
+    <Compile Include="Mods\UnityMod.cs" />
     <Compile Include="Mods\Utils\ModAssemblyUtility.cs" />
     <Compile Include="Mods\Utils\ReflectionUtils\ExposedClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

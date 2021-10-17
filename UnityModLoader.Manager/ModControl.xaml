@@ -12,16 +12,21 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <CheckBox x:Name="EnabledCheck" Content="Mod Name" HorizontalAlignment="Left"
                       VerticalAlignment="Center" Checked="EnabledCheck_Checked" Unchecked="EnabledCheck_Unchecked"/>
 
-            <TextBlock x:Name="DescriptionText" Text="Description: " HorizontalAlignment="Left"
-                       VerticalAlignment="Center" Grid.Row="1" Margin="0 10 0 0"/>
+            <TextBlock x:Name="DescriptionText" Text="Description: " HorizontalAlignment="Stretch"
+                       VerticalAlignment="Center" Grid.Row="1" Margin="0 10 0 0" Height="Auto"
+                       TextWrapping="Wrap"/>
 
             <TextBlock x:Name="AuthorText" Text="Author: " HorizontalAlignment="Left"
                        VerticalAlignment="Center" Grid.Row="2" Margin="0 10 0 0"/>
+
+            <TextBlock x:Name="VersionText" Text="Version: " HorizontalAlignment="Left"
+                       VerticalAlignment="Center" Grid.Row="3" Margin="0 10 0 0"/>
         </Grid>
     </Border>
 </UserControl>
