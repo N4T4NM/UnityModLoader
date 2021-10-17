@@ -68,7 +68,7 @@ namespace UnityModLoader.Manager
         void AddMod(FileInfo modFile)
         {
             Assembly modAsm = Assembly.Load(File.ReadAllBytes(modFile.FullName));
-            UnityMod mod = ModAssemblyUtility.GetMod(modAsm);
+            IUnityMod mod = ModAssemblyUtility.GetMod(modAsm);
 
             ModControl control = new ModControl();
             control.ModName = mod.Name;
