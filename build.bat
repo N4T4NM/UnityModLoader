@@ -29,7 +29,7 @@ del /Q /F UnityModLoader.Injection\Release\UnityModLoader.Injection.dll
 rmdir /S /Q UnityModLoader_x86
 
 echo == x64 == >> build.log
-echo  
+echo "   "
 
 echo ==== Platform x64 ====
 echo Compiling UnityModLoader.Library x64...
