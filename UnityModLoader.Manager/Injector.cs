@@ -22,7 +22,10 @@ namespace UnityModLoader.Manager
             uint dwSize, uint flAllocationType, uint flProtect);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out UIntPtr lpNumberOfBytesWritten);
+        static extern bool WriteProcessMemory(IntPtr hProcess, int lpBaseAddress, byte[] lpBuffer, uint nSize, out UIntPtr lpNumberOfBytesWritten);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool WriteProcessMemory(IntPtr hProcess, long lpBaseAddress, byte[] lpBuffer, uint nSize, out UIntPtr lpNumberOfBytesWritten);
 
         [DllImport("kernel32.dll")]
         static extern IntPtr CreateRemoteThread(IntPtr hProcess,
@@ -53,11 +56,15 @@ namespace UnityModLoader.Manager
                 PROCESS_VM_READ, false, game.Id);
 
             IntPtr loadLib = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
-            IntPtr alloc = VirtualAllocEx(hProcess, IntPtr.Zero, (uint)((dll.Length + 1) * sizeof(char)),
+            IntPtr alloc = VirtualAllocEx(hProcess, IntPtr.Zero, (uint)((dll.Length + 1) * Marshal.SizeOf(typeof(char))),
                 MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 
-            WriteProcessMemory(hProcess, alloc, Encoding.Default.GetBytes(dll),
-                (uint)((dll.Length + 1) * sizeof(char)), out _);
+            if (Environment.Is64BitProcess)
+                WriteProcessMemory(hProcess, alloc.ToInt64(), Encoding.Default.GetBytes(dll),
+                    (uint)((dll.Length + 1) * Marshal.SizeOf(typeof(char))), out _);
+            else WriteProcessMemory(hProcess, alloc.ToInt32(), Encoding.Default.GetBytes(dll),
+                (uint)((dll.Length + 1) * Marshal.SizeOf(typeof(char))), out _);
+
             CreateRemoteThread(hProcess, IntPtr.Zero, 0, loadLib, alloc, 0, IntPtr.Zero);
 
             Environment.Exit(0);
