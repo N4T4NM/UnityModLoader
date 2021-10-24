@@ -14,6 +14,5 @@ This tool allows you to load mods into unity games
 # Mods Creation
 * Create a new Class Library project
 * Import the Assembly-CSharp.dll file
-* Create a public class with the 'MainClass' attribute
-* Create a public static method without any parameters, and add the 'EntryPoint' attribute.
+* Create a public class and inherit IUnityMod
 * Check [ModSample.AutoLoader](https://github.com/N4T4NM/UnityModLoader/tree/master/ModSample.AutoLoader)
