@@ -1,6 +1,13 @@
 # UnityModLoader
 This tool allows you to load mods into unity games
 
+Features 
+* Easy to learn
+* Modify games without modifying original files
+* Compatible with new and old Unity versions
+* Compatible with x86 and x64 platforms
+* Compatible with mono and mono 2.0
+
 # Install
 
 * Move the UnityModLoader dll files to the game folder
